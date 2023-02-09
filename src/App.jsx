@@ -126,7 +126,7 @@ class App extends Component {
       <div className='header'>
         <div className='header__container' id='header__container' ref={this.containerRef}>
           <div className='header__content'>
-            <h1>hello</h1>
+            <h1>BAGOT</h1>
             <button onClick={() => this.change()} > ENTER</button>
           </div>
         </div>
