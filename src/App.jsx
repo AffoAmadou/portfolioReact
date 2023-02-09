@@ -12,98 +12,94 @@ import fragment from './script/fragment.glsl'
 
 // import { PrismicRichText, useFirstPrismicDocument, useAllPrismicDocumentsByType } from '@prismicio/react'
 
-function App() {
-  const containerRef = useRef(null);
-  let material = null;
-  let t = 0;
-  useEffect(() => {
-    const scene = new THREE.Scene();
-    const width = containerRef.current.offsetWidth;
-    const height = containerRef.current.offsetHeight;
+import React, { Component } from 'react';
 
-    const camera = new THREE.PerspectiveCamera(70, width / height, 100, 2000);
-    camera.position.z = 600;
-    camera.fov = 2 * Math.atan((height / 2) / 600) * (180 / Math.PI);
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.containerRef = React.createRef();
+    this.material = null;
+    this.t = 0;
+  }
 
-    const renderer = new THREE.WebGLRenderer({
+  componentDidMount() {
+    this.scene = new THREE.Scene();
+    const width = this.containerRef.current.offsetWidth;
+    const height = this.containerRef.current.offsetHeight;
+
+    this.camera = new THREE.PerspectiveCamera(70, width / height, 100, 2000);
+    this.camera.position.z = 600;
+    this.camera.fov = 2 * Math.atan((height / 2) / 600) * (180 / Math.PI);
+
+    this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
     });
 
-    containerRef.current.appendChild(renderer.domElement);
+    this.containerRef.current.appendChild(this.renderer.domElement);
 
-    const resize = () => {
-      const width = containerRef.current.offsetWidth;
-      const height = containerRef.current.offsetHeight;
-      renderer.setSize(width, height);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-    };
-
-    const render = () => {
-      t += 0.005;
-      material.uniforms.time.value = t;
-
-      renderer.render(scene, camera);
-      window.requestAnimationFrame(render);
-    };
+   
+    
 
     const addObjects = () => {
-      const geometry = new THREE.PlaneGeometry(400, 400, 20, 50);
-      material = new THREE.MeshNormalMaterial();
+      this.geometry = new THREE.PlaneGeometry(600, 400, 60, 60);
 
-      material = new THREE.ShaderMaterial({
+      this.material = new THREE.ShaderMaterial({
         uniforms: {
           time: { value: 0 },
           // oceanTexture: { value: new THREE.TextureLoader().load(ocean) },
-          hover: { value: new THREE.Vector2(0.51, 0.5) },
         },
         side: THREE.DoubleSide,
         fragmentShader: fragment,
         vertexShader: vertex,
-        wireframe: true,
+        // wireframe: true,
       });
 
-      const mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
+       this.mesh = new THREE.Mesh(this.geometry, this.material);
+      //  this.mesh.rotation.x = -Math.PI / 2;
+      this.scene.add(this.mesh);
 
-      resize();
-      render();
     };
 
     addObjects();
+
+    const resize = () => {
+      const width = this.containerRef.current.offsetWidth;
+      const height = this.containerRef.current.offsetHeight;
+      this.renderer.setSize(width, height);
+      this.camera.aspect = width / height;
+      this.camera.updateProjectionMatrix();
+    };
+
+    resize();
 
     const setupResize = () => {
       window.addEventListener('resize', resize);
     };
     setupResize();
 
+    const render = () => {
+      this.t += 0.05;
+      // this.mesh.rotation.y = this.t;
+      this.material.uniforms.time.value = this.t;
 
-
-
-    return () => {
-      window.removeEventListener('resize', resize);
+      this.renderer.render(this.scene, this.camera);
+      window.requestAnimationFrame(render);
     };
-  }, []);
+    render();
+  }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', resize);
+  }
 
-  return (
-    <div className='header' id='header' ref={containerRef}>
+  render() {
+    return (
+      <div className='header' id='header' ref={this.containerRef}>
 
-    </div>
-  )
+      </div>
+    );
+  }
 }
-export default App
-// const [pages] = useAllPrismicDocumentsByType('project')
-  // useEffect(() => {
-  //   console.log(pages)
-  // });{/* {pages && pages.map((page) => (
-      //   <div key={page.id}>
-      //     <h2>{page.data.title}</h2>
-      //   </div>
-      // ))} */}
 
-
-
-
-
+export default App;
