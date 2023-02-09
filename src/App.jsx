@@ -19,8 +19,17 @@ class App extends Component {
     super(props);
     this.containerRef = React.createRef();
     //boolean usestate for change method
-   console.log(this.props.number)
+    console.log(this.props.number)
     this.enter = false;
+    //next variable is true if this.props.number  equal 2
+    //short if statement
+
+    this.wire = this.props.number == 2 ? true : false
+
+
+
+
+
     this.material = null;
     this.t = 0;
   }
@@ -28,14 +37,14 @@ class App extends Component {
   change = () => {
     //set enter to the opposite of what it is
     this.enter = !this.enter;
-    if(this.enter){
-    console.log("im here")
-    GSAP.to(this.containerRef.current, {
-      scale: 0.5,
-      ease: 'expo.inOut',
-      duration: 1,
-    })
-    }else{
+    if (this.enter) {
+      console.log("im here")
+      GSAP.to(this.containerRef.current, {
+        scale: 0.5,
+        ease: 'expo.inOut',
+        duration: 1,
+      })
+    } else {
       console.log("im here")
       GSAP.to(this.containerRef.current, {
         scale: 1,
@@ -60,10 +69,9 @@ class App extends Component {
 
     this.containerRef.current.appendChild(this.renderer.domElement);
 
-    if(this.props.number == 2)
-    {
+    if (this.props.number == 2) {
       console.log("hey")
-     this.change()
+      this.change()
     }
 
 
@@ -73,13 +81,13 @@ class App extends Component {
       this.material = new THREE.ShaderMaterial({
         uniforms: {
           time: { value: 0 },
-          color:{value: this.props.number}
+          color: { value: this.props.number }
           // oceanTexture: { value: new THREE.TextureLoader().load(ocean) },
         },
         side: THREE.DoubleSide,
         fragmentShader: fragment,
         vertexShader: vertex,
-        // wireframe: true,
+        wireframe: this.wire,
       });
 
       this.mesh = new THREE.Mesh(this.geometry, this.material);
@@ -133,9 +141,9 @@ class App extends Component {
           <div className='header__content'>
             <h1>BAGOT</h1>
             <button onClick={() => this.change()} > Click et scroll aprés</button>
-            
+
           </div>
-         
+
         </div>
       </div>
     );
