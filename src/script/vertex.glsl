@@ -74,24 +74,19 @@ float cnoise(vec3 P){
   return 2.2 * n_xyz;
 }
 
-
-
-
 uniform float time;
 uniform vec2 hover;
 uniform float hoverState;
 varying float VNoise;
 varying vec2 vUv;
 
-
-
 void main() {
     vec3 newposition = position;
     float PI = 3.1415925;
 
-    float noise = cnoise(.7*vec3(position.x*4.,position.y*4. + time/5.,0.));
-    newposition.z += 180.*noise;
-    
+    float noise = cnoise(.2*vec3(position.x/45.,position.y/45. + time/5.,0.));
+    newposition.z += 245.*noise;
+
     vUv = uv;
     VNoise = noise;
 

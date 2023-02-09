@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 
 import * as THREE from 'three'
-
+import GSAP from 'gsap'
 
 import reactLogo from './assets/react.svg'
 import './App.css'
@@ -18,10 +18,32 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.containerRef = React.createRef();
+    //boolean usestate for change method
+   
+    this.enter = false;
     this.material = null;
     this.t = 0;
   }
 
+  change = () => {
+    //set enter to the opposite of what it is
+    this.enter = !this.enter;
+    if(this.enter){
+    console.log("im here")
+    GSAP.to(this.containerRef.current, {
+      scale: 0.5,
+      ease: 'expo.inOut',
+      duration: 1,
+    })
+    }else{
+      console.log("im here")
+      GSAP.to(this.containerRef.current, {
+        scale: 1,
+        ease: 'expo.inOut',
+        duration: 1,
+      })
+    }
+  }
   componentDidMount() {
     this.scene = new THREE.Scene();
     const width = this.containerRef.current.offsetWidth;
@@ -38,11 +60,11 @@ class App extends Component {
 
     this.containerRef.current.appendChild(this.renderer.domElement);
 
-   
-    
+
+
 
     const addObjects = () => {
-      this.geometry = new THREE.PlaneGeometry(600, 400, 60, 60);
+      this.geometry = new THREE.PlaneGeometry(1900, 1900, 350, 350);
 
       this.material = new THREE.ShaderMaterial({
         uniforms: {
@@ -55,8 +77,8 @@ class App extends Component {
         // wireframe: true,
       });
 
-       this.mesh = new THREE.Mesh(this.geometry, this.material);
-      //  this.mesh.rotation.x = -Math.PI / 2;
+      this.mesh = new THREE.Mesh(this.geometry, this.material);
+      this.mesh.rotation.x = Math.PI / 2;
       this.scene.add(this.mesh);
 
     };
@@ -87,19 +109,32 @@ class App extends Component {
       window.requestAnimationFrame(render);
     };
     render();
+
+
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', resize);
   }
 
+
+
+
+
   render() {
     return (
-      <div className='header' id='header' ref={this.containerRef}>
-
+      <div className='header'>
+        <div className='header__container' id='header__container' ref={this.containerRef}>
+          <div className='header__content'>
+            <h1>hello</h1>
+            <button onClick={() => this.change()} > ENTER</button>
+          </div>
+        </div>
       </div>
     );
   }
 }
 
 export default App;
+
+
