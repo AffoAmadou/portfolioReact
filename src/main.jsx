@@ -8,9 +8,9 @@ import { client } from './prismic'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
-    <PrismicProvider client={client}>
-      <App />
-      <App />
-    </PrismicProvider>
+  <PrismicProvider client={client}>
+    <App number="1" />
+    <App number="2" />
+  </PrismicProvider>
   // </React.StrictMode>,
 )

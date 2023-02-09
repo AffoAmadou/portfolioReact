@@ -19,7 +19,7 @@ class App extends Component {
     super(props);
     this.containerRef = React.createRef();
     //boolean usestate for change method
-   
+   console.log(this.props.number)
     this.enter = false;
     this.material = null;
     this.t = 0;
@@ -60,7 +60,11 @@ class App extends Component {
 
     this.containerRef.current.appendChild(this.renderer.domElement);
 
-
+    if(this.props.number == 2)
+    {
+      console.log("hey")
+     this.change()
+    }
 
 
     const addObjects = () => {
@@ -69,6 +73,7 @@ class App extends Component {
       this.material = new THREE.ShaderMaterial({
         uniforms: {
           time: { value: 0 },
+          color:{value: this.props.number}
           // oceanTexture: { value: new THREE.TextureLoader().load(ocean) },
         },
         side: THREE.DoubleSide,
@@ -127,8 +132,10 @@ class App extends Component {
         <div className='header__container' id='header__container' ref={this.containerRef}>
           <div className='header__content'>
             <h1>BAGOT</h1>
-            <button onClick={() => this.change()} > ENTER</button>
+            <button onClick={() => this.change()} > Click et scroll aprés</button>
+            
           </div>
+         
         </div>
       </div>
     );
